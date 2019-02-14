@@ -6,15 +6,14 @@ import IO;
 
 // normalize all words in the given requirement
 Requirement stemWords(Requirement reqs) {
+  Requirement result = {};
 
   for (<id, list[str] req> <- reqs) {
-    list[str] reqWords = [w | w <- req, w notin stopWords];
-    
-    result += {<id, reqWords>}; 
+    list[str] reqWords = stemAll(req);
+    result += <id, reqWords>;
   }
-  reqs.words = stemAll(reqs.words);
   
-  return reqs;
+  return result;
 }
 
 // TODO: Add extra functions if wanted / needed

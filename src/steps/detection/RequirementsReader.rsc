@@ -41,7 +41,12 @@ Requirement readLowlevelRequirements(DataSet grp) {
 private str applyHighlevelFiltering(str orig) {
 	// TODO: This is the spot to implement some extra filtering if wanted while reading in the highlevel requirements
 	// This function gets called for EVERY word in the highlevel requirements text
-	return orig;
+	str trimmed = "";
+	if (/<t:\w+>/ := orig){
+		trimmed = t;
+	}
+	
+	return trimmed;
 }
 
 private str applyLowlevelLineFiltering(str origLine) {
