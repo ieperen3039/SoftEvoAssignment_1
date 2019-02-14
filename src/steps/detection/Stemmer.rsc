@@ -18,7 +18,5 @@ Requirement stemWords(Requirement reqs) {
 
 // TODO: Add extra functions if wanted / needed
 
-@doc {
-  Returns the passed in list of words in a stemmed form
-}
+// Returns the passed in list of words in a stemmed form
 private list[str] stemAll(list[str] orig) = [porterStemmer(w) | w <- orig];

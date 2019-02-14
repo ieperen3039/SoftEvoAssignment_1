@@ -9,8 +9,20 @@ import IO;
 alias Vector = rel[str name, list[real] freq];
 
 Vector calculateVector(Requirement reqs, list[str] vocabulary) {
-	// REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-	return {};
+	Vector result = {};
+	
+	for (<id, list[str] req> <- reqs) {
+		list[real] freqs = [toReal(0) | w <- vocabulary];
+		
+		for (word <- req) {
+			int i = indexOf(vocabulary, word);
+			freqs[i] += 1;
+		}
+		
+    	result += <id, freqs>;
+  	}
+  
+	return result;
 }
 
 @doc {
