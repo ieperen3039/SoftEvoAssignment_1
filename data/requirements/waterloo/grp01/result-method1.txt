@@ -1,0 +1,15 @@
+RESULTS FOR "method1"
+-------------------------------
+Confusion matrix:
+                                       | Trace-links   | Trace-links 
+                                       | identified    | NOT identified
+                                       | manually      | manually
+---------------------------------------------------------------------------------
+Trace-links predicted by the tool      | 0             | 0
+Trace-links NOT predicted by the tool  | 0             | 0
+
+Precision: 0.%
+Recall:    0.%
+
+Found links by method:
+  
