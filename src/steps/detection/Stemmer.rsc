@@ -1,16 +1,19 @@
 module steps::detection::Stemmer
 
 import analysis::stemming::Snowball;
-
 import steps::detection::RequirementsReader;
-
 import IO;
 
+// normalize all words in the given requirement
 Requirement stemWords(Requirement reqs) {
-  // TODO: Stem the word list of the requirement. 
-  // You can stem a list of words using the given method 'stemAll'.
+
+  for (<id, list[str] req> <- reqs) {
+    list[str] reqWords = [w | w <- req, w notin stopWords];
+    
+    result += {<id, reqWords>}; 
+  }
+  reqs.words = stemAll(reqs.words);
   
-  // REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
   return reqs;
 }
 
