@@ -12,14 +12,19 @@ Vector calculateVector(Requirement reqs, list[str] vocabulary) {
 	Vector result = {};
 	
 	for (<id, list[str] req> <- reqs) {
-		list[real] freqs = [toReal(0) | w <- vocabulary];
-		
+		map[str, int] occ = (word: 0 | word <- vocabulary);
 		for (word <- req) {
-			int i = indexOf(vocabulary, word);
-			freqs[i] += 1;
+			occ[word] += 1;
 		}
 		
-    	result += <id, freqs>;
+		map[str, real] idf = calculateInverseDocumentFrequency(occ, req);
+		freqs = [];
+		for (word <- vocabulary){
+			real widf = idf[word] ? toReal(0);
+			freqs += widf * occ[word];
+		}
+		
+		result += <id, freqs>;
   	}
   
 	return result;

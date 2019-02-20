@@ -51,14 +51,18 @@ private str applyHighlevelFiltering(str orig) {
 
 private str applyLowlevelLineFiltering(str origLine) {
 	// TODO: This is the spot to implement some extra filtering if wanted while reading in the lowlevel requirements
-	// This function gets called for EVERY word in the lowlevel requirements text
-	return origLine;
+	// This function gets called for EVERY line in the lowlevel requirements text
+	if (/Overview:<req:.+>/ := origLine) {
+		return req;
+	}
+	
+	return "";
 }
 
 private str applyLowlevelWordFiltering(str origWord) {
 	// TODO: This is the spot to implement some extra filtering if wanted while reading in the lowlevel requirements
 	// This function gets called for EVERY word in the lowlevel requirements text
-	return origWord;
+	return applyHighlevelFiltering(origWord);
 }
 
 private list[str] readRequirements(loc dir, str fileName) =
