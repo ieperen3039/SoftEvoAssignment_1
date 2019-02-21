@@ -15,17 +15,13 @@ SimilarityMatrix calculateSimilarityMatrix(Requirement highlevel, Requirement lo
 	
 	for (<idH, list[str] reqH> <- highlevel) {
 		list[real] freqH;
-		for(<id, list[real] freq> <- vec){
-			if(id == idH){
-				freqH = freq;
-			}
+		for(<id, list[real] freq> <- vec, id == idH){
+			freqH = freq;
 		}
 		for (<idL, list[str] reqL> <- lowlevel) {
 			list[real] freqL;
-			for(<id, list[real] freq> <- vec){
-				if(id == idL){
-					freqL = freq;
-				};
+			for(<id, list[real] freq> <- vec, id == idL){
+				freqL = freq;
 			}
 			result += <idH, idL, cos(freqH, freqL)>;
 		};
@@ -44,8 +40,7 @@ real cos(list[real] high, list[real] low) {
 	
 	real x = sqrt((0. | it + h * h | real h <- high));
 	real y = sqrt((0. | it + l * l | real l <- low));
-	
-	//println("<top> / <x> * <y>");
+
 	
 	return top / (x * y);
 }
