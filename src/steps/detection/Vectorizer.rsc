@@ -25,6 +25,7 @@ Vector calculateVector(Requirement reqs, list[str] vocabulary) {
 		}
 		
 		result += <id, freqs>;
+		//println("<id>, <freqs>");
   	}
   
 	return result;

@@ -32,7 +32,7 @@ Requirement readLowlevelRequirements(DataSet grp) {
 
 	for (str req <- requirements, /^<id:UC[0-9]+>/ := trim(req), str line <- split("\n", trim(req))) {
 		list[str] reqWords = [applyLowlevelWordFiltering(toLowerCase(word)) | str fLine := applyLowlevelLineFiltering(line), /<word:\S+>/ := fLine];
-		result += {<id, reqWords>}; 
+		result += {<id, reqWords>};
 	}
 	
 	return result;
