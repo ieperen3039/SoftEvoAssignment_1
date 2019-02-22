@@ -3,57 +3,49 @@ module steps::detection::TraceLinkConstructor
 import steps::detection::SimilarityCalculator;
 import List;
 import IO;
+import Set;
+
+import util::Math;
 
 alias TraceLink = rel[str,str];
 alias AllTraceLinks = list[TraceLink];
 //alias SimilarityMatrix = rel[str highlevel, str lowlevel, real score];
 
 AllTraceLinks constructLinks(SimilarityMatrix sm, Requirement highlevel, Requirement lowlevel) =
-	[constructMethod1(sm), constructMethod2(sm), constructMethod4(sm, highlevel, lowlevel)]; // You can add more constructed trace-links to the list if wanted
+	[constructMethod1(sm), constructMethod2(sm), constructMethod3(sm), constructMethod4(sm, highlevel, lowlevel)]; // You can add more constructed trace-links to the list if wanted
 
 TraceLink constructMethod1(SimilarityMatrix sm) {
-	TraceLink result = {};
-	
-	for (<h, l, s> <- sm) {
-		if (s > 0){
-			result += <h, l>;
-		}
-	}
-
-	return result;
+  TraceLink result = {};
+  for(<idH, idL, score> <- sm, score > 0){
+	result += <idH, idL>;
+  }
+  return result; 
+  // return {<idH, idL> | <idH, idL> <- (<idH, idL, score> <- sm, score > 0)};
 }
 
 TraceLink constructMethod2(SimilarityMatrix sm) {
   TraceLink result = {};
-	
-	for (<h, l, s> <- sm) {
-		if (s >= 0.25){
-			result += <h, l>;
-		}
-	}
-
-	return result;
+  //for(<idH, idL, score> <- sm, abs(score) > 0.25){
+  for(<idH, idL, score> <- sm, score > 0.25){
+	result += <idH, idL>;
+  }
+  return result; 
+  // return {<idH, idL> | <idH, idL> <- (<idH, idL, score> <- sm, score > 0.25)};
 } 
 
 TraceLink constructMethod3(SimilarityMatrix sm) {
- 	TraceLink result = {};
-  	int max = 0;
-  	
-  	for (<h, l, s> <- sm) {
-  		if (s > max) {
-  			max = s;
-  		}
-  	}
-	
-	int bound = 0.67 * max;
-	
-	for (<h, l, s> <- sm) {
-		if (s > bound){
-			result += <h, l>;
-		}
-	}
-
-	return result;
+  TraceLink result = {};
+  set[str] idHs = {idH | (<idH, idL, score> <- sm)};
+  for(curr <- idHs){
+      set[real] scores = {};
+      for(<idH, idL, score> <- sm, idH == curr){
+      	scores += score;
+      }
+      for(<idH, idL, score> <- sm, (idH == curr) && (score > 0.67 * max(scores))){
+      	result += <idH, idL>;
+      }
+  }
+  return result;
 }
 
 TraceLink constructMethod4(SimilarityMatrix sm, Requirement hl, Requirement ll) {

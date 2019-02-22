@@ -11,11 +11,23 @@ import List;
 alias SimilarityMatrix = rel[str highlevel, str lowlevel, real score];
 
 SimilarityMatrix calculateSimilarityMatrix(Requirement highlevel, Requirement lowlevel, Vector vec) {
-	// TODO: Calculate the similarity matrix of the high- and lowlevel requirements using the passed in vectors
-	// You can use the given function 'cos(list[real] high, list[real] low)' to calculate the similarity score of two requirements
-
-  // REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-  return {};
+	SimilarityMatrix result = {};
+	
+	for (<idH, list[str] reqH> <- highlevel) {
+		list[real] freqH;
+		for(<id, list[real] freq> <- vec, id == idH){
+			freqH = freq;
+		}
+		for (<idL, list[str] reqL> <- lowlevel) {
+			list[real] freqL;
+			for(<id, list[real] freq> <- vec, id == idL){
+				freqL = freq;
+			}
+			result += <idH, idL, cos(freqH, freqL)>;
+		};
+  	}
+  
+	return result;
 }
 
 // TODO: Add extra functions if wanted / needed
@@ -28,6 +40,7 @@ real cos(list[real] high, list[real] low) {
 	
 	real x = sqrt((0. | it + h * h | real h <- high));
 	real y = sqrt((0. | it + l * l | real l <- low));
+
 	
 	return top / (x * y);
 }

@@ -3,6 +3,7 @@ module steps::detection::Stemmer
 import analysis::stemming::Snowball;
 import steps::detection::RequirementsReader;
 import IO;
+import List;
 
 // normalize all words in the given requirement
 Requirement stemWords(Requirement reqs) {
@@ -10,7 +11,9 @@ Requirement stemWords(Requirement reqs) {
 
   for (<id, list[str] req> <- reqs) {
     list[str] reqWords = stemAll(req);
-    result += <id, reqWords>;
+    if(size(reqWords) > 0){
+	    result += <id, reqWords>;
+    }
   }
   
   return result;
