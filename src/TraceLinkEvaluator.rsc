@@ -19,7 +19,7 @@ void evaluateGroup1() = evaluate(group1());
 void evaluateGroup9() = evaluate(group9());
 
 void evaluate(DataSet grp) {
-  if (!exists(grp.dir + "tracelinks.bin")) {
+  if (!exists(grp.dir + "tracelinks.result")) {
     throw "No trace-links created yet. Please run detector first";
   }
 
