@@ -31,7 +31,7 @@ void evaluate(DataSet grp) {
 	TraceLink manual = readManualTraceLinks(grp);
 	
 	println("(3/4) Reading trace-links found by automatic detection");
-	AllTraceLinks allLinks = readBinaryValueFile(#AllTraceLinks, grp.dir + "tracelinks.bin");
+	AllTraceLinks allLinks = readTextValueFile(#AllTraceLinks, grp.dir + "tracelinks.result");
 	
 	println("(4/4) Evaluating automatic detection methods and writing result to disc");
 	for (int i <- [0..size(allLinks)]) {
