@@ -1,6 +1,7 @@
 module steps::detection::TraceLinkConstructor
 
 import steps::detection::SimilarityCalculator;
+import steps::detection::RequirementsReader;
 import List;
 import IO;
 import Set;
@@ -49,11 +50,12 @@ TraceLink constructMethod3(SimilarityMatrix sm) {
 }
 
 TraceLink constructMethod4(SimilarityMatrix sm, Requirement hl, Requirement ll) {
-	list[real] sortScores = sort(sm.score);
+	list[real] sortScores = sort([score | <idH, idL, score> <- sm]);
 	// target minimum is the value of the ith largest element, and is found at the ith index from the last
-	int tgtIndex = length(sortScores) - (length(ll) * 1.5); // 1.5 links per low-level requirement
+	int tgtIndex = toInt(size(sortScores) - (size(ll) * 1)); // x links per low-level requirement
 	
 	real bound = sortScores[tgtIndex];
+ 	TraceLink result = {};
 	// gather links with scores strictly more than the bound, to reduce links to at most the given fraction of the requirements
 	for (<h, l, s> <- sm) {
 		if (s > bound){
