@@ -50,16 +50,32 @@ TraceLink constructMethod3(SimilarityMatrix sm) {
 }
 
 TraceLink constructMethod4(SimilarityMatrix sm, Requirement hl, Requirement ll) {
-	list[real] sortScores = sort([score | <idH, idL, score> <- sm]);
+	//list[real] sortScores = sort([score | <idH, idL, score> <- sm]);
 	// target minimum is the value of the ith largest element, and is found at the ith index from the last
-	int tgtIndex = toInt(size(sortScores) - (size(ll) * 1)); // x links per low-level requirement
+	//int tgtIndex = toInt(size(sortScores) - (size(ll) * 1)); // x links per low-level requirement
 	
-	real bound = sortScores[tgtIndex];
- 	TraceLink result = {};
+	//real bound = sortScores[tgtIndex];
+ 	//TraceLink result = {};
 	// gather links with scores strictly more than the bound, to reduce links to at most the given fraction of the requirements
-	for (<h, l, s> <- sm, s > bound) {
-		result += <h, l>;
-	}
+	//for (<h, l, s> <- sm, s > bound) {
+		//result += <h, l>;
+	//}
 
-	return result;
+	//return result;
+	
+	real allMax = max([score | <idH, idL, score> <- sm]);
+	TraceLink result = {};
+	  set[str] idHs = {idH | (<idH, idL, score> <- sm)};
+	  for(curr <- idHs){
+	      set[real] scores = {};
+	      for(<idH, idL, score> <- sm, idH == curr){
+	      	scores += score;
+	      }
+	      if(max(scores) > 0.25){
+		      for(<idH, idL, score> <- sm, (idH == curr) && (score > 0.67 * max(scores))){
+		      	result += <idH, idL>;
+		      }
+	      }
+	  }
+	  return result;
 }
