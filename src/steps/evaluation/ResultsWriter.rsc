@@ -20,6 +20,7 @@ void writeResultFile(DataSet grp, str methodName, TraceLink foundLinks, Evaluati
 	             '
 	             'Precision: <precision(result.precision * 100, 2)>%
 	             'Recall:    <precision(result.recall * 100, 2)>%
+	             'F-measure: <precision(result.Fmeasure * 100, 2)>
 	             '
 	             'Found links by method:
 	             '  <linksToStr(foundLinks)>";

@@ -8,27 +8,21 @@ import util::Math;
 import IO;
 
 alias ConfusionMatrix = tuple[int truePositives, int falsePositives, int trueNegatives, int falseNegatives];
-alias EvaluationResult = tuple[ConfusionMatrix cm, real precision, real recall];
+alias EvaluationResult = tuple[ConfusionMatrix cm, real precision, real recall, real Fmeasure];
 
 EvaluationResult evaluateMethod(TraceLink manual, TraceLink fromMethod, Requirement highlevel, Requirement lowlevel) {
-	// TODO: Evaluate the different methods by calculating the confuction matrix and recall and precision for each one.
-	
-	// REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-	return <<0,0,0,0>,0.,0.>;
+	ConfusionMatrix result = calculateConfusionMatrix(manual, fromMethod, highlevel, lowlevel);
+	real P = calculatePrecision(result);
+	real R = calculateRecall(result);
+	return <result, P, R, toReal(2) * ((P * R)/(P + R))>;
 }
 
 private real calculatePrecision(ConfusionMatrix cm) {
-  // TODO
-
-  // REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-  return 0.;
+  return toReal(cm.truePositives) / toReal(cm.truePositives + cm.falsePositives);
 }
 
 private real calculateRecall(ConfusionMatrix cm) { 
-  // TODO
-  
-  // REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-  return 0.;
+ return toReal(cm.truePositives) / toReal(cm.truePositives + cm.falseNegatives);
 }
 
 private ConfusionMatrix calculateConfusionMatrix(TraceLink manual, TraceLink automatic, Requirement highlevel, Requirement lowlevel) {
@@ -37,7 +31,41 @@ private ConfusionMatrix calculateConfusionMatrix(TraceLink manual, TraceLink aut
   // False positives: Nr of trace-link predicted by the tool BUT NOT identified manually
   // True negatives: Nr of trace-link NOT predicted by the tool AND NOT identified manually
   // False negatives: Nr of trace-link NOT predicted by the tool BUT identified manually
+  
+  set[str] idHs = {idH | (<idH, list[str] words> <- highlevel)};
+  set[str] idLs = {idL | (<idL, list[str] words> <- lowlevel)};
+  
+  int TP = 0;
+  int FP = 0;
+  int TN = 0;
+  int FN = 0;
+  for(idH <- idHs){
+  	set[str] idLsa = {};
+  	for(<idHa, idLa> <- automatic, idHa == idH){
+  		idLsa += idLa;
+  	}
+  	set[str] idLsm = {};
+  	for(<idHm, idLm> <- manual, idHm == idH){
+  		idLsm += idLm;
+  	}
+  	
+  	for(idL <- idLs){
+  		if(idL in idLsa && idL in idLsm){
+  			TP += 1;
+  		}
+  		if(idL in idLsa && idL notin idLsm){
+  			FP += 1;
+  		}
+  		if(idL notin idLsa && idL notin idLsm){
+  			TN += 1;
+  		}
+  		if(idL notin idLsa && idL in idLsm){
+  			FN += 1;
+  		}
+  	}
+  }
+  
 
   // REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-	return <0,0,0,0>;
+	return <TP, FP, TN, FN>;
 }
