@@ -24,8 +24,8 @@ TraceLink constructMethod1(SimilarityMatrix sm) {
 
 TraceLink constructMethod2(SimilarityMatrix sm) {
   TraceLink result = {};
-  //for(<idH, idL, score> <- sm, score > 0.25){
-  for(<idH, idL, score> <- sm, abs(score) > 0.25){
+  //for(<idH, idL, score> <- sm, abs(score) > 0.25){
+  for(<idH, idL, score> <- sm, score > 0.25){
 	result += <idH, idL>;
   }
   return result; 
@@ -40,7 +40,6 @@ TraceLink constructMethod3(SimilarityMatrix sm) {
       for(<idH, idL, score> <- sm, idH == curr){
       	scores += score;
       }
-      real maxiumum = max(scores);
       for(<idH, idL, score> <- sm, (idH == curr) && (score > 0.67 * max(scores))){
       	result += <idH, idL>;
       }
