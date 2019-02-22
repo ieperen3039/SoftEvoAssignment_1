@@ -40,10 +40,12 @@ private ConfusionMatrix calculateConfusionMatrix(TraceLink manual, TraceLink aut
   int TN = 0;
   int FN = 0;
   for(idH <- idHs){
+  
   	set[str] idLsa = {};
   	for(<idHa, idLa> <- automatic, idHa == idH){
   		idLsa += idLa;
   	}
+  	
   	set[str] idLsm = {};
   	for(<idHm, idLm> <- manual, idHm == idH){
   		idLsm += idLm;
@@ -65,7 +67,5 @@ private ConfusionMatrix calculateConfusionMatrix(TraceLink manual, TraceLink aut
   	}
   }
   
-
-  // REMOVE BELOW LINE, ONLY HERE TO MAKE THE TEMPLATES RUNNABLE
-	return <TP, FP, TN, FN>;
+  return <TP, FP, TN, FN>;
 }
