@@ -57,10 +57,8 @@ TraceLink constructMethod4(SimilarityMatrix sm, Requirement hl, Requirement ll) 
 	real bound = sortScores[tgtIndex];
  	TraceLink result = {};
 	// gather links with scores strictly more than the bound, to reduce links to at most the given fraction of the requirements
-	for (<h, l, s> <- sm) {
-		if (s > bound){
-			result += <h, l>;
-		}
+	for (<h, l, s> <- sm, s > bound) {
+		result += <h, l>;
 	}
 
 	return result;
