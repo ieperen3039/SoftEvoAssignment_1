@@ -36,7 +36,7 @@ void gatherLinks(DataSet grp) {
 	SimilarityMatrix sm = calculateSimilarityMatrix(highlevel, lowlevel, vectors);
 	
 	println("(7/7) Gathering trace links for different methods");
-	AllTraceLinks allLinks = constructLinks(sm);
+	AllTraceLinks allLinks = constructLinks(sm, highlevel, lowlevel);
 
 	writeBinaryValueFile(grp.dir + "tracelinks.bin", allLinks);	
 	
